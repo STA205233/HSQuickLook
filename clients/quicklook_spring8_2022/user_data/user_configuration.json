@@ -1,0 +1,12 @@
+{
+  "ws_host": "133.11.165.42",
+  "ws_port": "8080",
+  "title": "HSQuickLook",
+  "ti_scaling": 64,
+  "schema_list": {
+    "SPring8": {
+      "Event": "user_data/schema/SPring8/Event.js",
+      "Dark": "user_data/schema/SPring8/Dark.js"
+    }
+  }
+}
