@@ -24,7 +24,7 @@ HSQuickLook.main.schema =
 				"Temperature": {
 					"type": "int",
 				},
-				"Temperature-graph": { "type": "trend-graph", "group": [{ "source": "Temperature", "options": { "legend": "Temperature" } }], "options": { "xWidth": 100 } },
+				"Temperature": { "type": "trend-graph", "group": [{ "source": "Temperature", "options": { "legend": "Temperature" } }], "options": { "xWidth": 200 } },
 			}
 		},
 
@@ -34,9 +34,9 @@ HSQuickLook.main.schema =
 			"document": "Event_sumPH",
 			"period": "1",
 			"section": "PushToQuickLookDB_HistogramXrayEventProperties_sumPH",
-			"tableName": "sumPH",
+			"tableName": "SumPH",
 			"contents": {
-				"sunPH": { "source": "sumPH", "type": "image" },
+				"SumPH": { "source": "sumPH", "type": "image" },
 			}
 		},
 		{

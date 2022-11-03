@@ -13,6 +13,17 @@ HSQuickLook.main.schema =
 			}
 		},
 		{
+			"collection": "Scalardata",
+			"directory": "Detector",
+			"document": "Dark",
+			"period": "1",
+			"section": "Temperature",
+			"contents": {
+				"Temperature": { "type": "int" },
+				"Temperature-graph": { "type": "trend-graph", "group": [{ "source": "Temperature", "options": { "legend": "Temperature" } }], "options": { "xWidth": 200 } },
+			}
+		},
+		{
 			"collection": "Images",
 			"directory": "Detector",
 			"document": "frame_pedestal",
