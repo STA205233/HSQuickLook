@@ -13,11 +13,12 @@ HSQuickLook.main.schema =
 			}
 		},
 		{
-			"collection": "images",
+			"collection": "Images",
 			"directory": "Detector",
 			"document": "frame_pedestal",
 			"period": "1",
 			"section": "PushToQuickLookDB_HistogramFramePedestal",
+			"tableName": "frame_pedestal",
 			"contents": {
 				"frame_pedestal": {
 					"type": "image"
@@ -27,11 +28,12 @@ HSQuickLook.main.schema =
 
 		},
 		{
-			"collection": "images",
+			"collection": "Images",
 			"directory": "Detector",
 			"document": "raw_frame_image",
 			"period": "1",
 			"section": "PushToQuickLookDB_HistogramRawFrameImage",
+			"tableName": "HistogramRawFrameImage",
 			"contents": {
 				"raw_frame_image": {
 					"type": "image"

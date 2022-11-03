@@ -8,10 +8,10 @@ HSQuickLook.main.schema =
 			"section": "Metadata",
 			"contents": {
 				"Loop_counter": { "type": "int" },
-				"Capture_time": { "type": "string" },
 				"Filename": { "type": "string" },
 				"Count_rate": { "type": "int" },
-				"Whole_count": { "type": "int" }
+				"Whole_count": { "type": "int" },
+				"Count_rate_graph": { "type": "trend-graph", "group": [{ "source": "Count_rate", "options": { "legend": "Count_rate" } }], "options": { "xWidth": 200 } },
 			}
 		},
 		{
@@ -21,8 +21,10 @@ HSQuickLook.main.schema =
 			"period": "1",
 			"section": "Temperature",
 			"contents": {
-				"Temperature": { "type": "int" },
-				"Temperature-graph": { "type": "trend-graph", "group": [{ "source": "Temperature", "options": { "legend": "Temperature" } }], "options": { "xWidth": 100, "ywidth": 20, } },
+				"Temperature": {
+					"type": "int",
+				},
+				"Temperature-graph": { "type": "trend-graph", "group": [{ "source": "Temperature", "options": { "legend": "Temperature" } }], "options": { "xWidth": 100 } },
 			}
 		},
 
@@ -32,8 +34,9 @@ HSQuickLook.main.schema =
 			"document": "Event_sumPH",
 			"period": "1",
 			"section": "PushToQuickLookDB_HistogramXrayEventProperties_sumPH",
+			"tableName": "sumPH",
 			"contents": {
-				"sumPH": { "type": "image" },
+				"sunPH": { "source": "sumPH", "type": "image" },
 			}
 		},
 		{
@@ -42,8 +45,9 @@ HSQuickLook.main.schema =
 			"document": "Event_weight",
 			"period": "1",
 			"section": "PushToQuickLookDB_HistogramXrayEventProperties_weight",
+			"tableName": "Weight",
 			"contents": {
-				"weight": { "type": "image" },
+				"Weight": { "source": "weight", "type": "image" },
 			}
 		},
 		{
@@ -52,6 +56,7 @@ HSQuickLook.main.schema =
 			"document": "Event_ix",
 			"period": "1",
 			"section": "PushToQuickLookDB_HistogramXrayEventProperties_ix",
+			"tableName": "ix",
 			"contents": {
 				"ix": { "type": "image" },
 			}
@@ -64,6 +69,7 @@ HSQuickLook.main.schema =
 			"document": "Event_iy",
 			"period": "1",
 			"section": "PushToQuickLookDB_HistogramXrayEventProperties_iy",
+			"tableName": "iy",
 			"contents": {
 				"iy": { "type": "image" },
 			}
