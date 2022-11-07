@@ -8,7 +8,16 @@ HSQuickLook.main.schema =
 			"section": "Metadata",
 			"contents": {
 				"Loop_counter": { "type": "int" },
-				"Filename": { "type": "string" },
+				"Filename": {
+					"type": "string", "conversion": function (v) {
+						for (let i = 0; i < v.length - 1; i++) {
+							if (v[i] == v[i + 1] && v[i] == '/') {
+								v[i] = ' ';
+							}
+						}
+						return String(v).replace(" ", "").split("/")[4];
+					},
+				},
 				"Count_rate": { "type": "int" },
 				"Whole_count": { "type": "int" },
 				"Count_rate_graph": { "type": "trend-graph", "group": [{ "source": "Count_rate", "options": { "legend": "Count_rate" } }], "options": { "xWidth": 200 } },

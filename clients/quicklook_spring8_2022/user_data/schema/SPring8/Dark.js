@@ -9,7 +9,17 @@ HSQuickLook.main.schema =
 			"contents": {
 				"Loop_counter": { "type": "int" },
 				"Capture_time": { "type": "string" },
-				"Filename": { "type": "string" }
+				"Filename": {
+					"type": "string"
+					, "conversion": function (v) {
+						for (let i = 0; i < v.length - 1; i++) {
+							if (v[i] == v[i + 1] && v[i] == '/') {
+								v[i] = ' ';
+							}
+						}
+						return String(v).replace(" ", "").split("/")[4];
+					},
+				}
 			}
 		},
 		{
