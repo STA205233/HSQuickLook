@@ -1,5 +1,5 @@
 {
-  "ws_host": "1192.168.1.102",
+  "ws_host": "192.168.1.102",
   "ws_port": "8080",
   "title": "HSQuickLook",
   "ti_scaling": 64,
