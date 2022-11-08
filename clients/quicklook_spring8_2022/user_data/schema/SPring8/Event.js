@@ -16,12 +16,13 @@ HSQuickLook.main.schema =
 						}
 					}
 					let arr = v.replace(" ","").split("/")
-					return arr[6]+"/"+arr[7]+"/"+arr[8];}}},
-				"Count_rate": { "type": "int" },
-				"Whole_count": { "type": "int" },
+					return arr[6]+"/"+arr[7]+"/"+arr[8];}},
+					"Whole_count": { "type": "int" },
+					"Count_rate": { "type": "int" },
 				"Count_rate_graph": { "type": "trend-graph", "group": [{ "source": "Count_rate", "options": { "legend": "Count_rate" } }], "options": { "xWidth": 200 } },
 			
 		},
+	},
 		{
 			"collection": "Scalardata",
 			"directory": "Detector",
@@ -32,7 +33,7 @@ HSQuickLook.main.schema =
 				"Temperature": {
 					"type": "int",
 				},
-				"Temperature": { "type": "trend-graph", "group": [{ "source": "Temperature", "options": { "legend": "Temperature" } }], "options": { "xWidth": 200 } },
+				"Temperature-graph": { "type": "trend-graph", "group": [{ "source": "Temperature", "options": { "legend": "Temperature" } }], "options": { "xWidth": 200 } },
 			}
 		},
 
