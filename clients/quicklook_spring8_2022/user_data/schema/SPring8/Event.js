@@ -18,7 +18,7 @@ HSQuickLook.main.schema =
 					let arr = v.replace(" ","").split("/")
 					return arr[6]+"/"+arr[7]+"/"+arr[8];}},
 					"Whole_count": { "type": "int" },
-					"Count_rate": { "type": "int" },
+					"Count_per_frame": { "type": "int","source":"Count_rate" },
 				"Count_rate_graph": { "type": "trend-graph", "group": [{ "source": "Count_rate", "options": { "legend": "Count_rate" } }], "options": { "xWidth": 200 } },
 			
 		},
