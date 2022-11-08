@@ -9,12 +9,13 @@ HSQuickLook.main.schema =
 			"contents": {
 				"Loop_counter": { "type": "int" },
 				"Filename": { "type": "string","conversion":function(v){
+					v = String(v)
 					for (var i=0;i<v.length-1;i++){
 						if (v[i] == "/" && v[i+1] == "/"){
 							v[i] = " ";
 						}
 					}
-					let arr = String(v).replace(" ","").split("/")
+					let arr = v.replace(" ","").split("/")
 					return arr[6]+"/"+arr[7]+"/"+arr[8];}}},
 				"Count_rate": { "type": "int" },
 				"Whole_count": { "type": "int" },
