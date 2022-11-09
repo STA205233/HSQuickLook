@@ -11,7 +11,7 @@ HSQuickLook.main.schema =
 				"Filename": {
 					"type": "string", "conversion": function (v) {
 						v = String(v)
-						let arr = v.replace("//", "/").split("/")
+						let arr = v.replaceAll("//", "/").split("/")
 						return arr[6] + "/" + arr[7] + "/" + arr[8] + "/" + arr[9];
 					}
 				},
