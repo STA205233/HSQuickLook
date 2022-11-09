@@ -8,21 +8,24 @@ HSQuickLook.main.schema =
 			"section": "Metadata",
 			"contents": {
 				"Loop_counter": { "type": "int" },
-				"Filename": { "type": "string","conversion":function(v){
-					v = String(v)
-					for (var i=0;i<v.length-1;i++){
-						if (v[i] == "/" && v[i+1] == "/"){
-							v[i] = " ";
+				"Filename": {
+					"type": "string", "conversion": function (v) {
+						v = String(v)
+						for (var i = 0; i < v.length - 1; i++) {
+							if (v[i] == "/" && v[i + 1] == "/") {
+								v[i] = " ";
+							}
 						}
+						let arr = v.replace(" ", "").split("/")
+						return arr[6] + "/" + arr[7] + "/" + arr[8] + "/" + arr[9];
 					}
-					let arr = v.replace(" ","").split("/")
-					return arr[6]+"/"+arr[7]+"/"+arr[8];}},
-					"Whole_count": { "type": "int" },
-					"Count_per_frame": { "type": "int","source":"Count_rate" },
+				},
+				"Whole_count": { "type": "int" },
+				"Count_per_frame": { "type": "int", "source": "Count_rate" },
 				"Count_rate_graph": { "type": "trend-graph", "group": [{ "source": "Count_rate", "options": { "legend": "Count_rate" } }], "options": { "xWidth": 200 } },
-			
+
+			},
 		},
-	},
 		{
 			"collection": "Scalardata",
 			"directory": "Detector",
