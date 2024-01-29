@@ -192,7 +192,13 @@ HSQuickLook.graph.TrendCurve = function() {
         title: "",
         range: [-1.0, +1.0],
       },
-      autosize:true,
+      margin: {
+        t: 40,
+        b: 40,
+        l: 60,
+        r: 40
+      },
+      autosize: true,
     };
 
     this.config = {
@@ -250,7 +256,6 @@ HSQuickLook.graph.TrendCurve = function() {
     };
 
     this.plot = function () {
-      this.autoMargin();
       if (counter == this.refreshCycle) {
         counter = 0;
       }
