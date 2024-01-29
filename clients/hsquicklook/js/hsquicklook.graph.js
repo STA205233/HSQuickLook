@@ -27,46 +27,9 @@ HSQuickLook.graph.TrendCurve = function() {
     this.capacity = -1;
     this.differentialMode = false;
     this.upperBound = 0.0;
+    this.drawn = false;
 
-    this.config =
-    {
-      modeBarButtonsToAdd: [
-        {
-          name:  'Toggle log/linear of X axis',
-          icon: Plotly.Icons.pencil,
-          click: function (gd) {
-            if (this.layout.xaxis.type == "log") {
-              this.layout.xaxis.type = "linear";
-            }
-            else if (this.layout.xaxis.type == "linear") {
-              this.layout.xaxis.type = "log";
-            }
-            else {
-              alert("Scale Setting of x axis is invalid: Set linear forcely");
-              this.layout.xaxis.type == "linear";
-            }
-            this.plot();
-          }
-        },
-        {
-          name: 'Toggle log/linear of y axis',
-          icon: Plotly.Icons.pencil,
-          direction: 'up',
-          click: function (gd) {
-            if (this.layout.yaxis.type == "log") {
-              this.layout.yaxis.type = "linear";
-            }
-            else if (this.layout.yaxis.type == "linear") {
-              this.layout.yaxis.type = "log";
-            }
-            else {
-              alert("Scale Setting of y axis is invalid: Set linear forcely");
-              this.layout.yaxis.type == "linear";
-            }
-            this.plot();
-          }
-        }
-      ],
+    this.config = {
       editable: true,
       displaylogo: false,
       scrollZoom: true,
@@ -123,7 +86,7 @@ HSQuickLook.graph.TrendCurve = function() {
 
   TrendCurve.prototype.getLastYValue = function () {
     var data = this.data,
-      n = data.x.length;
+      n = data.y.length;
 
     if (n > 0) {
       return data.y[n - 1];
@@ -150,7 +113,13 @@ HSQuickLook.graph.TrendCurve = function() {
   };
 
   TrendCurve.prototype.plot = function () {
-    Plotly.newPlot($(this.placeholder).attr('id'), [this.data], this.layout, this.config);
+    if (!this.drawn) {
+          Plotly.newPlot($(this.placeholder).attr('id'), data, this.layout, this.config);
+          this.drawn = true;
+        }
+        else {
+          Plotly.update($(this.placeholder).attr('id'), data, this.layout, this.config);
+        }
   };
 
   TrendCurve.prototype.pushData = function (dataPoint) {
@@ -207,49 +176,6 @@ HSQuickLook.graph.TrendCurve = function() {
     this.yMax = +1.0;
     this.drawn = false;
 
-    this.config ={
-      modeBarButtonsToAdd: [
-        {
-          name: 'Toggle log/linear of x-axis',
-          icon: Plotly.Icons.pencil,
-          click: function (gd) {
-            if (this.layout.xaxis.type == "log") {
-              this.layout.xaxis.type = "linear";
-            }
-            else if (this.layout.xaxis.type == "linear") {
-              this.layout.xaxis.type = "log";
-            }
-            else {
-              alert("Scale Setting of x axis is invalid: Set linear forcely");
-              this.layout.xaxis.type == "linear";
-            }
-            this.reStyle(gd,'xaxis.type', this.layout.xaxis.type);
-          }
-        },
-        {
-          name: 'Toggle log/linear of y-axis',
-          icon: Plotly.Icons.pencil,
-          direction: 'up',
-          click: function (gd) {
-            if (this.layout.yaxis.type == "log") {
-              this.layout.yaxis.type = "linear";
-            }
-            else if (this.layout.yaxis.type == "linear") {
-              this.layout.yaxis.type = "log";
-            }
-            else {
-              alert("Scale Setting of y axis is invalid: Set linear forcely");
-              this.layout.yaxis.type == "linear";
-            }
-            this.reStyle(gd,'yaxis.type', this.layout.yaxis.type);
-          }
-        }
-      ],
-      // modeBarButtonsToRemove: ['pan2d','select2d','lasso2d','resetScale2d','zoomOut2d'],
-      editable: true,
-      displaylogo: false,
-    };
-
     this.layout = {
       showlegend: true,
       legend: {
@@ -275,6 +201,11 @@ HSQuickLook.graph.TrendCurve = function() {
       autosize:true,
     };
 
+    this.config ={
+      editable: true,
+      displaylogo: false,
+    };
+
     this.addTrendCurve = function (sourceID, curve) {
       trendCurves[sourceID] = curve;
       data.push(curve.data);
@@ -294,7 +225,7 @@ HSQuickLook.graph.TrendCurve = function() {
           this.drawn = true;
         }
         else {
-          Plotly.newPlot($(this.placeholder).attr('id'), data, this.layout, this.config);
+          Plotly.update($(this.placeholder).attr('id'), data, this.layout, this.config);
         }
       }
       counter += 1;
