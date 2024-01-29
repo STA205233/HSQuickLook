@@ -192,16 +192,50 @@ HSQuickLook.graph.TrendCurve = function() {
         title: "",
         range: [-1.0, +1.0],
       },
-      margin: {
-        b: 40,
-        l: 40,
-        r: 40,
-        t: 40
-      },
       autosize:true,
     };
 
-    this.config ={
+    this.config = {
+      modeBarButtonsToAdd:[ {
+        name: "Toggle linear/log in x-axis",
+        icon: Plotly.Icons.pencil,
+        click: function (gd) {
+          if (gd.layout.xaxis.type == "linear") {
+            gd.layout.xaxis.type = "log";
+          }
+          else if (gd.layout.xaxis.type == "log") {
+            gd.layout.xaxis.type = "linear";
+          }
+          Plotly.update(gd, gd.data, gd.layout, gd.config);
+        }
+      },
+      {
+        name: "Toggle linear/log in y-axis",
+        icon: Plotly.Icons.pencil,
+        click: function (gd) {
+          if (gd.layout.yaxis.type == "linear") {
+            gd.layout.yaxis.type = "log";
+          }
+          else if (gd.layout.yaxis.type == "log") {
+            gd.layout.yaxis.type = "linear";
+          }
+          Plotly.update(gd, gd.data, gd.layout, gd.config);
+        }
+        },
+      {
+        name: "Toggle legend ON/OFF",
+        icon: Plotly.Icons.pencil,
+        click: function (gd) {
+          if (gd.layout.showlegend === true) {
+            gd.layout.showlegend = false;
+          }
+          else if (gd.layout.showlegend === false) {
+            gd.layout.showlegend = true;
+          }
+          Plotly.update(gd, gd.data, gd.layout, gd.config);
+        }
+        },
+      ],
       editable: true,
       displaylogo: false,
     };
@@ -216,6 +250,7 @@ HSQuickLook.graph.TrendCurve = function() {
     };
 
     this.plot = function () {
+      this.autoMargin();
       if (counter == this.refreshCycle) {
         counter = 0;
       }
