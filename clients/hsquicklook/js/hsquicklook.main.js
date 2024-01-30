@@ -639,8 +639,7 @@ var HSQuickLook = HSQuickLook || {};
         graph.refreshCycle = refreshCycle;
       }
       if ('yRange' in info.options) {
-        graph.options.yaxis.min = info.options.yRange[0];
-        graph.options.yaxis.max = info.options.yRange[1];
+        graph.layout.yaxis.range = info.options.yRange;
       }
       if ('frame' in info.options) {
         frameOption = info.options.frame;
@@ -754,7 +753,6 @@ var HSQuickLook = HSQuickLook || {};
         sourceID = tableID + "-" + source;
         curve = graph.getTrendCurve(sourceID);
         curve.pushData([xValue, yValue]);
-        graph.adjustRangeY(curve.getLastYValue());
       }
     }
 

@@ -163,10 +163,10 @@ HSQuickLook.graph.TrendCurve = function() {
    * Object prototype MultiTrendCurves
    */
   HSQuickLook.graph.MultiTrendCurves = function () {
-    var trendCurves = [],
-      data = [],
+    var data = [],
       counter = 0;
 
+    this.trendCurves = [];
     this.placeholder = "";
     this.refreshCycle = 4;
     this.refreshPhase = 1;
@@ -178,6 +178,7 @@ HSQuickLook.graph.TrendCurve = function() {
 
     this.layout = {
       showlegend: true,
+      title: " ",
       legend: {
         xanchor: "right",
         yanchor: "top"
@@ -189,7 +190,7 @@ HSQuickLook.graph.TrendCurve = function() {
       },
       yaxis: {
         type: "linear",
-        title: "",
+        title: " ",
         range: [-1.0, +1.0],
       },
       margin: {
@@ -206,10 +207,10 @@ HSQuickLook.graph.TrendCurve = function() {
         name: "Toggle linear/log in x-axis",
         icon: Plotly.Icons.pencil,
         click: function (gd) {
-          if (gd.layout.xaxis.type == "linear") {
+          if (gd.layout.xaxis.type === "linear") {
             gd.layout.xaxis.type = "log";
           }
-          else if (gd.layout.xaxis.type == "log") {
+          else if (gd.layout.xaxis.type === "log") {
             gd.layout.xaxis.type = "linear";
           }
           Plotly.update(gd, gd.data, gd.layout, gd.config);
@@ -219,10 +220,10 @@ HSQuickLook.graph.TrendCurve = function() {
         name: "Toggle linear/log in y-axis",
         icon: Plotly.Icons.pencil,
         click: function (gd) {
-          if (gd.layout.yaxis.type == "linear") {
+          if (gd.layout.yaxis.type === "linear") {
             gd.layout.yaxis.type = "log";
           }
-          else if (gd.layout.yaxis.type == "log") {
+          else if (gd.layout.yaxis.type === "log") {
             gd.layout.yaxis.type = "linear";
           }
           Plotly.update(gd, gd.data, gd.layout, gd.config);
@@ -241,18 +242,39 @@ HSQuickLook.graph.TrendCurve = function() {
           Plotly.update(gd, gd.data, gd.layout, gd.config);
         }
         },
+        {
+          name: "Automove of x-axis",
+          icon: Plotly.Icons.pencil,
+          click: function (gd) {
+            if (gd.attributes.autoMove.value === "true") {
+              gd.attributes.autoMove.value = "false";
+            }
+            else if (gd.attributes.autoMove.value === "false") {
+              gd.attributes.autoMove.value = "true";
+            }
+            Plotly.update(gd, gd.data, gd.layout, gd.config);
+          },
+        },
+        {
+          name: "Autoscale of y-axis",
+          icon: Plotly.Icons.pencil,
+          click: function (gd) {
+            gd.layout.yaxis.range = [Number(gd.attributes.ymin.value), Number(gd.attributes.ymax.value)];
+            Plotly.update(gd, gd.data, gd.layout, gd.config);
+          }
+        },
       ],
       editable: true,
       displaylogo: false,
     };
 
     this.addTrendCurve = function (sourceID, curve) {
-      trendCurves[sourceID] = curve;
+      this.trendCurves[sourceID] = curve;
       data.push(curve.data);
     };
 
     this.getTrendCurve = function (sourceID) {
-      return trendCurves[sourceID];
+      return this.trendCurves[sourceID];
     };
 
     this.plot = function () {
@@ -260,7 +282,17 @@ HSQuickLook.graph.TrendCurve = function() {
         counter = 0;
       }
       if (counter == this.refreshPhase) {
+        var range = [this.yMin, this.yMax];
+        for(var curve in this.trendCurves){
+          var value = this.trendCurves[curve].getLastYValue();
+          range = GetAppropriateRangeY(range, value);
+        };
+        this.setYMinMax(range);
+        $(this.placeholder).attr('ymax', this.yMax);
+        $(this.placeholder).attr('ymin', this.yMin);
         if (!this.drawn) {
+          $(this.placeholder).attr('automove', "true");
+          this.setRangeY([this.yMin, this.yMax]);
           Plotly.newPlot($(this.placeholder).attr('id'), data, this.layout, this.config);
           this.drawn = true;
         }
@@ -284,35 +316,51 @@ HSQuickLook.graph.TrendCurve = function() {
     this.layout.yaxis.range = range;
   };
 
+  MultiTrendCurves.prototype.setYMinMax = function (range) {
+    this.yMin = range[0];
+    this.yMax = range[1];
+  };
+
   MultiTrendCurves.prototype.resetRangeY = function () {
     this.layout.yaxis.range[0] = this.yMin;
     this.layout.yaxis.range[1] = this.yMax;
   };
 
   MultiTrendCurves.prototype.adjustRangeX = function (x) {
+    if ($(this.placeholder).attr('automove') === "false") { return; }
     this.layout.xaxis.range[0] = x - this.xWidth + 0.5;
     this.layout.xaxis.range[1] = x + 0.5;
   };
 
   MultiTrendCurves.prototype.adjustRangeY = function (y) {
-    if (y === void 0) { return; }
+    var range = GetAppropriateRangeY(this.layout.yaxis.range ,y);
+    if (range === null) {
+      return;
+    }
+    this.setRangeY(range);
+  };
+})(); /* end of the anonymous function */
 
-    var y0 = this.layout.yaxis.range[0],
-      y1 = this.layout.yaxis.range[1],
+GetAppropriateRangeY = function (currentRange, y) {
+    if (y === void 0) { return null; }
+
+    var y0 = currentRange[0],
+      y1 = currentRange[1],
       w = y1 - y0,
       r = (y - y0) / w,
       s = 1.0,
-      c = 0.95;
+      c = 0.95,
+      ret = [y0, y1];
 
     if (r > c) {
       s = r / c;
       y1 = y0 + w * s;
-      this.layout.yaxis.range[1] = y1;
+      ret[1] = y1;
     }
     else if (r < 1 - c) {
       s = (1.0 - r) / c;
       y0 = y1 - w * s;
-      this.layout.yaxis.range[0] = y0;
+      y[1] = y0;
     }
-  };
-})(); /* end of the anonymous function */
+    return ret;
+  }
