@@ -209,9 +209,13 @@ HSQuickLook.graph.TrendCurve = function() {
         click: function (gd) {
           if (gd.layout.xaxis.type === "linear") {
             gd.layout.xaxis.type = "log";
+            gd.layout.xaxis.range[0] = Math.log10(gd.layout.xaxis.range[0]);
+            gd.layout.xaxis.range[1] = Math.log10(gd.layout.xaxis.range[1]);
           }
           else if (gd.layout.xaxis.type === "log") {
             gd.layout.xaxis.type = "linear";
+            gd.layout.xaxis.range[0] = 10**gd.layout.xaxis.range[0];
+            gd.layout.xaxis.range[1] = 10**gd.layout.xaxis.range[1];
           }
           Plotly.update(gd, gd.data, gd.layout, gd.config);
         }
@@ -222,9 +226,13 @@ HSQuickLook.graph.TrendCurve = function() {
         click: function (gd) {
           if (gd.layout.yaxis.type === "linear") {
             gd.layout.yaxis.type = "log";
+            gd.layout.yaxis.range[0] = Math.log10(gd.layout.yaxis.range[0]);
+            gd.layout.yaxis.range[1] = Math.log10(gd.layout.yaxis.range[1]);
           }
           else if (gd.layout.yaxis.type === "log") {
             gd.layout.yaxis.type = "linear";
+            gd.layout.yaxis.range[0] = 10**gd.layout.yaxis.range[0];
+            gd.layout.yaxis.range[1] = 10**gd.layout.yaxis.range[1];
           }
           Plotly.update(gd, gd.data, gd.layout, gd.config);
         }
@@ -287,6 +295,9 @@ HSQuickLook.graph.TrendCurve = function() {
           var value = this.trendCurves[curve].getLastYValue();
           range = GetAppropriateRangeY(range, value);
         };
+        if (this.layout.yaxis.type === "log") {
+          range = [Math.log10(range[0]), Math.log10(range[1])];
+        }
         this.setYMinMax(range);
         $(this.placeholder).attr('ymax', this.yMax);
         $(this.placeholder).attr('ymin', this.yMin);
@@ -307,18 +318,38 @@ HSQuickLook.graph.TrendCurve = function() {
   var MultiTrendCurves = HSQuickLook.graph.MultiTrendCurves;
 
   MultiTrendCurves.prototype.setRangeX = function (range) {
-    this.layout.xaxis.range = range;
+    if (this.layout.xaxis.type === "log") {
+      this.layout.xaxis.range[0] = Math.log10(range[0]);
+      this.layout.xaxis.range[1] = Math.log10(range[1]);
+    }
+    else {
+      this.layout.xaxis.range = range;
+    }
   };
 
   MultiTrendCurves.prototype.setRangeY = function (range) {
-    this.yMin = range[0];
-    this.yMax = range[1];
-    this.layout.yaxis.range = range;
+    if (this.layout.yaxis.type === "log") {
+      this.layout.yaxis.range[0] = Math.log10(range[0]);
+      this.layout.yaxis.range[1] = Math.log10(range[1]);
+      this.yMin = Math.log10(range[0]);
+      this.yMax = Math.log10(range[1]);
+    }
+    else {
+      this.yMin = range[0];
+      this.yMax = range[1];
+      this.layout.yaxis.range = range;
+    }
   };
 
   MultiTrendCurves.prototype.setYMinMax = function (range) {
-    this.yMin = range[0];
-    this.yMax = range[1];
+    if (this.layout.yaxis.type === "log") {
+      this.yMin = Math.log10(range[0]);
+      this.yMax = Math.log10(range[1]);
+    }
+    else {
+      this.yMin = range[0];
+      this.yMax = range[1];
+    }
   };
 
   MultiTrendCurves.prototype.resetRangeY = function () {
@@ -328,8 +359,14 @@ HSQuickLook.graph.TrendCurve = function() {
 
   MultiTrendCurves.prototype.adjustRangeX = function (x) {
     if ($(this.placeholder).attr('automove') === "false") { return; }
-    this.layout.xaxis.range[0] = x - this.xWidth + 0.5;
-    this.layout.xaxis.range[1] = x + 0.5;
+    if (this.layout.xaxis.type === "log") {
+      this.layout.xaxis.range[0] = Math.log10(x - this.xWidth + 0.5);
+      this.layout.xaxis.range[1] = Math.log10(x + 0.5);
+    }
+    else {
+      this.layout.xaxis.range[0] = x - this.xWidth + 0.5;
+      this.layout.xaxis.range[1] = x + 0.5;
+    }
   };
 
   MultiTrendCurves.prototype.adjustRangeY = function (y) {
@@ -337,7 +374,11 @@ HSQuickLook.graph.TrendCurve = function() {
     if (range === null) {
       return;
     }
-    this.setRangeY(range);
+    if (this.layout.yaxis.type === "log") {
+      this.setRangeY([Math.log10(range[0]), Math.log10(range[1])]);
+    }
+    else {
+    this.setRangeY(range);}
   };
 })(); /* end of the anonymous function */
 
