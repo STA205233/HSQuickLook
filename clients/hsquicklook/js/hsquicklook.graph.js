@@ -68,23 +68,23 @@ HSQuickLook.graph.TrendCurve = function() {
       }
     };
 
-    this.setCurrentData = function (x, y) {
+    this.setCurrentData = function(x, y) {
       currentData[0] = x;
       currentData[1] = y;
     };
 
-    this.getCurrentDataX = function () {
+    this.getCurrentDataX = function() {
       return currentData[0];
     };
 
-    this.getCurrentDataY = function () {
+    this.getCurrentDataY = function() {
       return currentData[1];
     };
   };
 
   var TrendCurve = HSQuickLook.graph.TrendCurve;
 
-  TrendCurve.prototype.getLastYValue = function () {
+  TrendCurve.prototype.getLastYValue = function() {
     var data = this.data,
       n = data.y.length;
 
@@ -95,15 +95,15 @@ HSQuickLook.graph.TrendCurve = function() {
     }
   };
 
-  TrendCurve.prototype.setRangeX = function (range) {
+  TrendCurve.prototype.setRangeX = function(range) {
     this.layout.xaxis = range;
   };
 
-  TrendCurve.prototype.setRangeY = function (range) {
+  TrendCurve.prototype.setRangeY = function(range) {
     this.layout.yaxis = range;
   };
 
-  TrendCurve.prototype.setCapacity = function (capacity) {
+  TrendCurve.prototype.setCapacity = function(capacity) {
     var data = this.data;
     if (capacity > 0 && capacity < data.x.length) {
       data.x.splice(0, data.x.length - capacity);
@@ -112,7 +112,7 @@ HSQuickLook.graph.TrendCurve = function() {
     this.capacity = capacity;
   };
 
-  TrendCurve.prototype.plot = function () {
+  TrendCurve.prototype.plot = function() {
     if (!this.drawn) {
           Plotly.newPlot($(this.placeholder).attr('id'), data, this.layout, this.config);
           this.drawn = true;
@@ -122,7 +122,7 @@ HSQuickLook.graph.TrendCurve = function() {
         }
   };
 
-  TrendCurve.prototype.pushData = function (dataPoint) {
+  TrendCurve.prototype.pushData = function(dataPoint) {
     var data = this.data,
       size = data.x.length,
       capacity = this.capacity,
@@ -285,7 +285,7 @@ HSQuickLook.graph.TrendCurve = function() {
       return this.trendCurves[sourceID];
     };
 
-    this.plot = function () {
+    this.plot = function() {
       if (counter == this.refreshCycle) {
         counter = 0;
       }
@@ -317,7 +317,7 @@ HSQuickLook.graph.TrendCurve = function() {
 
   var MultiTrendCurves = HSQuickLook.graph.MultiTrendCurves;
 
-  MultiTrendCurves.prototype.setRangeX = function (range) {
+  MultiTrendCurves.prototype.setRangeX = function(range) {
     if (this.layout.xaxis.type === "log") {
       this.layout.xaxis.range[0] = Math.log10(range[0]);
       this.layout.xaxis.range[1] = Math.log10(range[1]);
@@ -327,7 +327,7 @@ HSQuickLook.graph.TrendCurve = function() {
     }
   };
 
-  MultiTrendCurves.prototype.setRangeY = function (range) {
+  MultiTrendCurves.prototype.setRangeY = function(range) {
     if (this.layout.yaxis.type === "log") {
       this.layout.yaxis.range[0] = Math.log10(range[0]);
       this.layout.yaxis.range[1] = Math.log10(range[1]);
@@ -341,7 +341,7 @@ HSQuickLook.graph.TrendCurve = function() {
     }
   };
 
-  MultiTrendCurves.prototype.setYMinMax = function (range) {
+  MultiTrendCurves.prototype.setYMinMax = function(range) {
     if (this.layout.yaxis.type === "log") {
       this.yMin = Math.log10(range[0]);
       this.yMax = Math.log10(range[1]);
@@ -352,12 +352,12 @@ HSQuickLook.graph.TrendCurve = function() {
     }
   };
 
-  MultiTrendCurves.prototype.resetRangeY = function () {
+  MultiTrendCurves.prototype.resetRangeY = function() {
     this.layout.yaxis.range[0] = this.yMin;
     this.layout.yaxis.range[1] = this.yMax;
   };
 
-  MultiTrendCurves.prototype.adjustRangeX = function (x) {
+  MultiTrendCurves.prototype.adjustRangeX = function(x) {
     if ($(this.placeholder).attr('automove') === "false") { return; }
     if (this.layout.xaxis.type === "log") {
       this.layout.xaxis.range[0] = Math.log10(x - this.xWidth + 0.5);
@@ -369,7 +369,7 @@ HSQuickLook.graph.TrendCurve = function() {
     }
   };
 
-  MultiTrendCurves.prototype.adjustRangeY = function (y) {
+  MultiTrendCurves.prototype.adjustRangeY = function(y) {
     var range = GetAppropriateRangeY(this.layout.yaxis.range ,y);
     if (range === null) {
       return;
@@ -382,7 +382,7 @@ HSQuickLook.graph.TrendCurve = function() {
   };
 })(); /* end of the anonymous function */
 
-GetAppropriateRangeY = function (currentRange, y) {
+GetAppropriateRangeY = function(currentRange, y) {
     if (y === void 0) { return null; }
 
     var y0 = currentRange[0],
