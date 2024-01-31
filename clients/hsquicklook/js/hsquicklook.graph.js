@@ -37,20 +37,28 @@ var HSQuickLook = HSQuickLook || {};
     
     this.layout = {
       showlegend: true,
+      title: " ",
       legend: {
         xanchor: "right",
         yanchor: "top"
       },
       xaxis: {
         type: "linear",
-        title: "Time [s]",
+        title: "Time (s)",
         range: [-1.0, +1.0],
       },
       yaxis: {
         type: "linear",
-        title: "",
+        title: " ",
         range: [-1.0, +1.0],
-      }
+      },
+      margin: {
+        t: 40,
+        b: 40,
+        l: 60,
+        r: 40
+      },
+      autosize: true,
     };
     
     this.data = {
@@ -290,13 +298,13 @@ var HSQuickLook = HSQuickLook || {};
       }
       if (counter == this.refreshPhase) {
         var range = [this.yMin, this.yMax];
+        if (this.layout.yaxis.type === "log") {
+          range = [10**(range[0]), 10**(range[1])];
+        }
         for(var curve in this.trendCurves){
           var value = this.trendCurves[curve].getLastYValue();
           range = GetAppropriateRangeY(range, value);
         };
-        if (this.layout.yaxis.type === "log") {
-          range = [Math.log10(range[0]), Math.log10(range[1])];
-        }
         this.setYMinMax(range);
         $(this.placeholder).attr('ymax', this.yMax);
         $(this.placeholder).attr('ymin', this.yMin);
