@@ -1,10 +1,10 @@
 /*******************************************************************************
  * JGraph.js for HS Quick Look
- *
+ * 
  * Authors: Soki Sakurai, Hirokazu Odaka
  * Date: 2013-**-**
  * Date: 2014-12-20 | Hirokazu Odaka | new design.
- *
+ * 
  ******************************************************************************/
 
 /* Global variable */
@@ -20,7 +20,7 @@ var HSQuickLook = HSQuickLook || {};
   /***************************************************************************
    * Object prototype TrendCurve
    */
-HSQuickLook.graph.TrendCurve = function() {
+  HSQuickLook.graph.TrendCurve = function() {
     var currentData = [void 0, void 0];
 
     this.placeholder = "";
@@ -28,13 +28,13 @@ HSQuickLook.graph.TrendCurve = function() {
     this.differentialMode = false;
     this.upperBound = 0.0;
     this.drawn = false;
-
+    
     this.config = {
       editable: true,
       displaylogo: false,
       scrollZoom: true,
     };
-
+    
     this.layout = {
       showlegend: true,
       legend: {
@@ -52,7 +52,7 @@ HSQuickLook.graph.TrendCurve = function() {
         range: [-1.0, +1.0],
       }
     };
-
+    
     this.data = {
       x: [],
       y: [],
@@ -87,7 +87,7 @@ HSQuickLook.graph.TrendCurve = function() {
   TrendCurve.prototype.getLastYValue = function() {
     var data = this.data,
       n = data.y.length;
-
+    
     if (n > 0) {
       return data.y[n - 1];
     } else {
@@ -111,7 +111,7 @@ HSQuickLook.graph.TrendCurve = function() {
     }
     this.capacity = capacity;
   };
-
+  
   TrendCurve.prototype.plot = function() {
     if (!this.drawn) {
           Plotly.newPlot($(this.placeholder).attr('id'), data, this.layout, this.config);
@@ -121,7 +121,7 @@ HSQuickLook.graph.TrendCurve = function() {
           Plotly.update($(this.placeholder).attr('id'), data, this.layout, this.config);
         }
   };
-
+  
   TrendCurve.prototype.pushData = function(dataPoint) {
     var data = this.data,
       size = data.x.length,
@@ -130,9 +130,9 @@ HSQuickLook.graph.TrendCurve = function() {
       lastDataY = this.getCurrentDataY(),
       newDataX = dataPoint[0],
       newDataY = dataPoint[1];
-
+    
     this.setCurrentData(newDataX, newDataY);
-
+    
     if (this.differentialMode == true) {
       if (lastDataX === void 0) {
         return;
@@ -165,7 +165,7 @@ HSQuickLook.graph.TrendCurve = function() {
   HSQuickLook.graph.MultiTrendCurves = function () {
     var data = [],
       counter = 0;
-
+    
     this.trendCurves = [];
     this.placeholder = "";
     this.refreshCycle = 4;
@@ -175,7 +175,6 @@ HSQuickLook.graph.TrendCurve = function() {
     this.yMin = -1.0;
     this.yMax = +1.0;
     this.drawn = false;
-
     this.layout = {
       showlegend: true,
       title: " ",
@@ -201,7 +200,7 @@ HSQuickLook.graph.TrendCurve = function() {
       },
       autosize: true,
     };
-
+    
     this.config = {
       modeBarButtonsToAdd:[ {
         name: "Toggle linear/log in x-axis",
@@ -368,7 +367,7 @@ HSQuickLook.graph.TrendCurve = function() {
       this.layout.xaxis.range[1] = x + 0.5;
     }
   };
-
+  
   MultiTrendCurves.prototype.adjustRangeY = function(y) {
     var range = GetAppropriateRangeY(this.layout.yaxis.range ,y);
     if (range === null) {
@@ -383,25 +382,25 @@ HSQuickLook.graph.TrendCurve = function() {
 })(); /* end of the anonymous function */
 
 GetAppropriateRangeY = function(currentRange, y) {
-    if (y === void 0) { return null; }
-
-    var y0 = currentRange[0],
-      y1 = currentRange[1],
-      w = y1 - y0,
-      r = (y - y0) / w,
-      s = 1.0,
-      c = 0.95,
-      ret = [y0, y1];
-
-    if (r > c) {
-      s = r / c;
-      y1 = y0 + w * s;
-      ret[1] = y1;
-    }
-    else if (r < 1 - c) {
-      s = (1.0 - r) / c;
-      y0 = y1 - w * s;
-      y[1] = y0;
-    }
-    return ret;
+  if (y === void 0) { return null; }
+  
+  var y0 = currentRange[0],
+    y1 = currentRange[1],
+    w = y1 - y0,
+    r = (y - y0) / w,
+    s = 1.0,
+    c = 0.95,
+    ret = [y0, y1];
+    
+  if (r > c) {
+    s = r / c;
+    y1 = y0 + w * s;
+    ret[1] = y1;
+  }
+  else if (r < 1 - c) {
+    s = (1.0 - r) / c;
+    y0 = y1 - w * s;
+    y[1] = y0;
+  }
+  return ret;
   }
