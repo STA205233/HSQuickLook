@@ -59,6 +59,9 @@ var HSQuickLook = HSQuickLook || {};
         r: 40
       },
       autosize: true,
+      autoMove: true,
+      yMin: -1.0,
+      yMax: 1.0
     };
     
     this.data = {
@@ -180,8 +183,6 @@ var HSQuickLook = HSQuickLook || {};
     this.refreshPhase = 1;
     this.timeOrigin = void 0;
     this.xWidth = 600.0;
-    this.yMin = -1.0;
-    this.yMax = +1.0;
     this.drawn = false;
     this.layout = {
       showlegend: true,
@@ -207,6 +208,9 @@ var HSQuickLook = HSQuickLook || {};
         r: 40
       },
       autosize: true,
+      autoMove: true,
+      yMin: -1.0,
+      yMax: 1.0
     };
     
     this.config = {
@@ -237,16 +241,16 @@ var HSQuickLook = HSQuickLook || {};
             gd.layout.yaxis.range[0] = Math.log10(ret[0]);
             gd.layout.yaxis.range[1] = Math.log10(ret[1]);
 
-            var ret = CheckLogCondition([Number(gd.attributes.ymin.value), Number(gd.attributes.ymax.value)]);
-            gd.attributes.ymin.value = Math.log10(ret[0]);
-            gd.attributes.ymax.value = Math.log10(ret[1]);
+            var ret = CheckLogCondition([gd.layout.yMin,gd.layout.yMax]);
+            gd.layout.yMin = Math.log10(ret[0]);
+            gd.layout.yMax = Math.log10(ret[1]);
           }
           else if (gd.layout.yaxis.type === "log") {
             gd.layout.yaxis.type = "linear";
             gd.layout.yaxis.range[0] = 10**gd.layout.yaxis.range[0];
             gd.layout.yaxis.range[1] = 10**gd.layout.yaxis.range[1];
-            gd.attributes.ymin.value = 10**Number(gd.attributes.ymin.value);
-            gd.attributes.ymax.value = 10**Number(gd.attributes.ymax.value);
+            gd.layout.yMin = 10**gd.layout.yMin;
+            gd.layout.yMax = 10**gd.layout.yMax;
           }
           Plotly.update(gd, gd.data, gd.layout, gd.config);
         }
@@ -268,11 +272,11 @@ var HSQuickLook = HSQuickLook || {};
           name: "Automove of x-axis",
           icon: Plotly.Icons.tooltip_basic,
           click: function (gd) {
-            if (gd.attributes.autoMove.value === "true") {
-              gd.attributes.autoMove.value = "false";
+            if (gd.layout.autoMove === true) {
+              gd.layout.autoMove =false;
             }
-            else if (gd.attributes.autoMove.value === "false") {
-              gd.attributes.autoMove.value = "true";
+            else if (gd.layout.autoMove === true) {
+              gd.layout.autoMove = false;
             }
             Plotly.update(gd, gd.data, gd.layout, gd.config);
           },
@@ -281,7 +285,7 @@ var HSQuickLook = HSQuickLook || {};
           name: "Autoscale of y-axis",
           icon: Plotly.Icons.drawrect,
           click: function (gd) {
-            gd.layout.yaxis.range = [Number(gd.attributes.ymin.value), Number(gd.attributes.ymax.value)];
+            gd.layout.yaxis.range = [gd.layout.yMin, gd.layout.yMax];
             Plotly.update(gd, gd.data, gd.layout, gd.config);
           }
         },
@@ -304,7 +308,7 @@ var HSQuickLook = HSQuickLook || {};
         counter = 0;
       }
       if (counter == this.refreshPhase) {
-        var range = [this.yMin, this.yMax];
+        var range = [this.layout.yMin, this.layout.yMax];
         if (this.layout.yaxis.type === "log") {
           range = [10**(range[0]), 10**(range[1])];
         }
@@ -314,7 +318,6 @@ var HSQuickLook = HSQuickLook || {};
         };
         this.setYMinMax(range);
         if (!this.drawn) {
-          $(this.placeholder).attr('automove', "true");
           this.setRangeY(range);
           Plotly.newPlot($(this.placeholder).attr('id'), data, this.layout, this.config);
           this.drawn = true;
@@ -344,39 +347,39 @@ var HSQuickLook = HSQuickLook || {};
       var ret = CheckLogCondition(range)
       this.layout.yaxis.range[0] = Math.log10(ret[0]);
       this.layout.yaxis.range[1] = Math.log10(ret[1]);
-      this.yMin = Math.log10(ret[0]);
-      this.yMax = Math.log10(ret[1]);
+      this.layout.yMin = Math.log10(ret[0]);
+      this.layout.yMax = Math.log10(ret[1]);
     }
     else {
-      this.yMin = range[0];
-      this.yMax = range[1];
+      this.layout.yMin = range[0];
+      this.layout.yMax = range[1];
       this.layout.yaxis.range = range;
     }
-    $(this.placeholder).attr('ymax', this.yMax);
-    $(this.placeholder).attr('ymin', this.yMin);
+    $(this.placeholder).attr('ymax', this.layout.yMax);
+    $(this.placeholder).attr('ymin', this.layout.yMin);
   };
 
   MultiTrendCurves.prototype.setYMinMax = function(range) {
     if (this.layout.yaxis.type === "log") {
       var ret = CheckLogCondition(range);
-      this.yMin = Math.log10(ret[0]);
-      this.yMax = Math.log10(ret[1]);
+      this.layout.yMin = Math.log10(ret[0]);
+      this.layout.yMax = Math.log10(ret[1]);
     }
     else {
-      this.yMin = range[0];
-      this.yMax = range[1];
+      this.layout.yMin = range[0];
+      this.layout.yMax = range[1];
     }
-    $(this.placeholder).attr('ymax', this.yMax);
-    $(this.placeholder).attr('ymin', this.yMin);
+    $(this.placeholder).attr('ymax', this.layout.yMax);
+    $(this.placeholder).attr('ymin', this.layout.yMin);
   };
 
   MultiTrendCurves.prototype.resetRangeY = function() {
-    this.layout.yaxis.range[0] = this.yMin;
-    this.layout.yaxis.range[1] = this.yMax;
+    this.layout.yaxis.range[0] = this.layout.yMin;
+    this.layout.yaxis.range[1] = this.layout.yMax;
   };
 
   MultiTrendCurves.prototype.adjustRangeX = function(x) {
-    if ($(this.placeholder).attr('automove') === "false") { return; }
+    if (this.layout.autoMove === false) { return; }
     if (this.layout.xaxis.type === "log") {
       var ret = CheckLogCondition([x - this.xWidth + 0.5, x + 0.5])
       this.layout.xaxis.range[0] = Math.log10(ret[0]);
