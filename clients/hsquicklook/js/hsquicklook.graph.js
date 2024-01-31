@@ -315,7 +315,7 @@ var HSQuickLook = HSQuickLook || {};
         this.setYMinMax(range);
         if (!this.drawn) {
           $(this.placeholder).attr('automove', "true");
-          this.setRangeY([this.yMin, this.yMax]);
+          this.setRangeY(range);
           Plotly.newPlot($(this.placeholder).attr('id'), data, this.layout, this.config);
           this.drawn = true;
         }
