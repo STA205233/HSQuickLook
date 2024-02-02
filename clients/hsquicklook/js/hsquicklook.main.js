@@ -752,8 +752,16 @@ var HSQuickLook = HSQuickLook || {};
       if (yValue != Number.NaN) {
         sourceID = tableID + "-" + source;
         curve = graph.getTrendCurve(sourceID);
+        var range = [graph.layout.yMin, graph.layout.yMax];
+        if (graph.layout.yaxis.type === "log") {
+          range = [10 ** (range[0]), 10 ** (range[1])];
+        }
+        var value = curve.getLastYValue();
+        range = GetAppropriateRangeY(range, value);
+        graph.setYMinMax(range);
         curve.pushData([xValue, yValue]);
-        if (graph.drawn === false){
+        graph.adjustRangeY(curve.getLastYValue());
+        if (graph.layout.autoScaleY === false) {
           graph.adjustRangeY(yValue);
         }
       }
